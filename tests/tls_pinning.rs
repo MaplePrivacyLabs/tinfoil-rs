@@ -4,6 +4,7 @@ use tinfoil::verifier::tls::create_pinned_client;
 
 /// Test that TLS pinning rejects connections with wrong fingerprint
 #[tokio::test]
+#[ignore = "Live third-party infrastructure: requires separate explicit authorization"]
 async fn test_wrong_fingerprint_rejected() {
     let wrong_fp = "0000000000000000000000000000000000000000000000000000000000000000";
 
@@ -26,6 +27,7 @@ async fn test_wrong_fingerprint_rejected() {
 /// Test that TLS pinning rejects a second wrong fingerprint too (not just the first).
 /// Ensures the verifier runs on every connection, not just once.
 #[tokio::test]
+#[ignore = "Live third-party infrastructure: requires separate explicit authorization"]
 async fn test_wrong_fingerprint_rejected_repeatedly() {
     let wrong_fp = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
     let client = create_pinned_client(wrong_fp).expect("Failed to create client");
@@ -47,6 +49,7 @@ async fn test_wrong_fingerprint_rejected_repeatedly() {
 
 /// Test that TLS pinning accepts connections with correct fingerprint
 #[tokio::test]
+#[ignore = "Live third-party infrastructure: requires separate explicit authorization"]
 async fn test_correct_fingerprint_accepted() {
     // First fetch the correct fingerprint from attestation
     let doc = tinfoil::verifier::fetch("inference.tinfoil.sh")

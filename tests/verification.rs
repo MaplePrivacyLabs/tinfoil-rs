@@ -14,6 +14,7 @@ const TEST_ENCLAVES: &[(&str, &str)] = &[
 
 /// Test hardware attestation with full AMD certificate chain verification
 #[tokio::test]
+#[ignore = "Live third-party infrastructure: requires separate explicit authorization"]
 async fn test_full_hardware_attestation() {
     let doc = attestation::fetch(ROUTER_HOST)
         .await
@@ -31,6 +32,7 @@ async fn test_full_hardware_attestation() {
 
 /// Test Sigstore verification of code provenance
 #[tokio::test]
+#[ignore = "Live third-party infrastructure: requires separate explicit authorization"]
 async fn test_sigstore_verification() {
     let result = sigstore::verify_repo(ROUTER_REPO)
         .await
@@ -45,6 +47,7 @@ async fn test_sigstore_verification() {
 
 /// Test GitHub release fetching
 #[tokio::test]
+#[ignore = "Live third-party infrastructure: requires separate explicit authorization"]
 async fn test_github_release() {
     let tag = github::fetch_latest_tag(ROUTER_REPO)
         .await
@@ -63,6 +66,7 @@ async fn test_github_release() {
 /// This must FAIL if measurements don't match — swallowing mismatches would hide
 /// a broken verification pipeline.
 #[tokio::test]
+#[ignore = "Live third-party infrastructure: requires separate explicit authorization"]
 async fn test_full_verification_measurements_match() {
     // Step 1: Hardware attestation
     let doc = attestation::fetch(ROUTER_HOST)
@@ -89,6 +93,7 @@ async fn test_full_verification_measurements_match() {
 
 /// Test verification against multiple enclaves
 #[tokio::test]
+#[ignore = "Live third-party infrastructure: requires separate explicit authorization"]
 async fn test_verify_multiple_enclaves() {
     for (enclave, repo) in TEST_ENCLAVES {
         let mut client = SecureClient::new(*enclave, *repo, "test-key");
@@ -104,6 +109,7 @@ async fn test_verify_multiple_enclaves() {
 
 /// Test router discovery endpoint
 #[tokio::test]
+#[ignore = "Live third-party infrastructure: requires separate explicit authorization"]
 async fn test_fetch_routers() {
     let routers = discovery::fetch_routers()
         .await
@@ -119,6 +125,7 @@ async fn test_fetch_routers() {
 
 /// Test default client creation with router discovery
 #[tokio::test]
+#[ignore = "Live third-party infrastructure: requires separate explicit authorization"]
 async fn test_default_client() {
     let mut client = SecureClient::new_default_client("test-key")
         .await
@@ -132,6 +139,7 @@ async fn test_default_client() {
 
 /// Test fetching attestation bundle from GitHub
 #[tokio::test]
+#[ignore = "Live third-party infrastructure: requires separate explicit authorization"]
 async fn test_fetch_attestation_bundle() {
     let repo = "tinfoilsh/confidential-llama3-3-70b";
     let tag = "v0.0.1";

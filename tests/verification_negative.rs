@@ -16,6 +16,7 @@ const ROUTER_REPO: &str = "tinfoilsh/confidential-model-router";
 
 /// Verification must fail when the repo doesn't exist.
 #[tokio::test]
+#[ignore = "Live third-party infrastructure: requires separate explicit authorization"]
 async fn test_wrong_repo_fails_verification() {
     let mut client = SecureClient::new(ROUTER_HOST, "wrong-org/wrong-repo", "test-key");
     assert!(client.verify().await.is_err());
@@ -25,6 +26,7 @@ async fn test_wrong_repo_fails_verification() {
 /// match the enclave. This tests the Sigstore certificate identity check
 /// or measurement comparison (not just a 404 from a nonexistent repo).
 #[tokio::test]
+#[ignore = "Live third-party infrastructure: requires separate explicit authorization"]
 async fn test_mismatched_real_repo_fails_verification() {
     let mut client =
         SecureClient::new(ROUTER_HOST, "tinfoilsh/confidential-llama3-3-70b", "test-key");
@@ -33,12 +35,14 @@ async fn test_mismatched_real_repo_fails_verification() {
 
 /// Sigstore verify_repo must fail when called with the wrong repo.
 #[tokio::test]
+#[ignore = "Live third-party infrastructure: requires separate explicit authorization"]
 async fn test_sigstore_wrong_repo_fails() {
     assert!(sigstore::verify_repo("wrong-org/wrong-repo").await.is_err());
 }
 
 /// Verification must fail for a repo that doesn't exist on GitHub.
 #[tokio::test]
+#[ignore = "Live third-party infrastructure: requires separate explicit authorization"]
 async fn test_nonexistent_repo_fails() {
     let mut client = SecureClient::new(
         ROUTER_HOST,
@@ -54,6 +58,7 @@ async fn test_nonexistent_repo_fails() {
 
 /// Verification must fail when a pinned measurement doesn't match the enclave.
 #[tokio::test]
+#[ignore = "Live third-party infrastructure: requires separate explicit authorization"]
 async fn test_wrong_pinned_measurement_fails() {
     let wrong_measurement = Measurement {
         type_: PredicateType::SnpTdxMultiPlatformV1,
@@ -74,6 +79,7 @@ async fn test_wrong_pinned_measurement_fails() {
 
 /// Verification must fail when the enclave host is unreachable.
 #[tokio::test]
+#[ignore = "Live third-party infrastructure: requires separate explicit authorization"]
 async fn test_unreachable_host_fails() {
     let mut client = SecureClient::new(
         "nonexistent-host-that-does-not-resolve.tinfoil.sh",
@@ -85,6 +91,7 @@ async fn test_unreachable_host_fails() {
 
 /// Hardware attestation fetch must fail for an unreachable host.
 #[tokio::test]
+#[ignore = "Live third-party infrastructure: requires separate explicit authorization"]
 async fn test_attestation_fetch_unreachable_host_fails() {
     assert!(
         attestation::fetch("nonexistent-host-that-does-not-resolve.tinfoil.sh")
