@@ -4,6 +4,7 @@ use tinfoil::SecureClient;
 
 /// Test client verification flow
 #[tokio::test]
+#[ignore = "Live third-party infrastructure: requires separate explicit authorization"]
 async fn test_client_verification() {
     let mut client = SecureClient::new("inference.tinfoil.sh", "tinfoilsh/confidential-model-router", "test-key");
 

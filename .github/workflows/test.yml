@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+    branches: [main, upstream-v0.2.1]
 
 permissions: {}
 
@@ -58,6 +58,7 @@ jobs:
         run: cargo test --locked --test '*' --verbose
 
       - name: Check if API key is available
+        if: github.repository == 'tinfoilsh/tinfoil-rs'
         # Bash only — Windows runner uses pwsh by default, but bash is
         # available there too. Force it explicitly so the heredoc syntax
         # works on every OS in the matrix.
@@ -73,7 +74,7 @@ jobs:
           fi
 
       - name: Run API integration tests
-        if: steps.gate.outputs.run == 'true'
+        if: github.repository == 'tinfoilsh/tinfoil-rs' && steps.gate.outputs.run == 'true'
         env:
           TINFOIL_API_KEY: ${{ secrets.TINFOIL_API_KEY }}
         run: cargo test --locked --test '*' --verbose -- --ignored
