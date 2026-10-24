@@ -54,6 +54,12 @@ jobs:
       - name: Run unit tests
         run: cargo test --locked --lib --verbose
 
+      - name: Run vendored EHBP vectors
+        # Upstream transport tests construct their own default reqwest client.
+        # Exercise that default provider on Linux; SDK builds keep ring on all OSes.
+        if: runner.os == 'Linux'
+        run: cargo test --locked -p tinfoil-ehbp --lib --verbose
+
       - name: Run integration tests
         run: cargo test --locked --test '*' --verbose
 

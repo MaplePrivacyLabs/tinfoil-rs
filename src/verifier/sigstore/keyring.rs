@@ -207,7 +207,7 @@ impl Keyring {
 mod tests {
     use super::*;
     use p256::ecdsa::{signature::Signer, SigningKey};
-    use x509_cert::spki::EncodePublicKey;
+    use p256::pkcs8::EncodePublicKey;
 
     fn test_signing_key() -> SigningKey {
         // Well-known test scalar (RFC 6979 A.2.5)

@@ -290,7 +290,7 @@ mod tests {
     use der::DecodePem;
     use p256::ecdsa::VerifyingKey;
     use p256::pkcs8::DecodePublicKey;
-    use x509_cert::spki::EncodePublicKey;
+    use p256::pkcs8::EncodePublicKey;
 
     // Test data from sigstore-rs
     #[test]
