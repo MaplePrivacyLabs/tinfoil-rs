@@ -147,3 +147,26 @@ This library is a drop-in replacement for [async-openai](https://github.com/64bi
 Please report security vulnerabilities by emailing [security@tinfoil.sh](mailto:security@tinfoil.sh).
 
 We aim to respond to (legitimate) security reports within 24 hours.
+
+## Crypto dependency security
+
+Attestation verification uses P-256/P-384 0.14 and requires crypto-bigint 0.7.6
+or newer for the constant-time arithmetic fixes. The unused `sev` dependency
+is removed; SEV-SNP verification remains in `src/verifier/attestation/sev/`.
+
+EHBP 0.3.1 is vendored under `vendor/encrypted-http-body-protocol/` so its HPKE
+features can be restricted to the X25519 suite the protocol uses. Its Rust
+protocol source and test vectors are unchanged from the upstream revision
+recorded in `UPSTREAM.toml`; only its dependency feature selection differs.
+This avoids enabling the unused legacy P-256 implementation through HPKE's
+default features.
+
+The vendored EHBP crate has a distinct, non-published prerelease version, so a
+future registry package cannot silently substitute the unpatched upstream
+crate. This fork is consumed through its pinned Git revision. CI runs the SDK with its ring-only TLS configuration on all supported OSes.
+On Linux, it also runs the upstream EHBP tests and vectors with their default
+reqwest provider (the fixtures construct their own HTTP clients):
+
+```sh
+cargo test --locked -p tinfoil-ehbp --lib
+```

@@ -1,0 +1,4 @@
+repository = "https://github.com/tinfoilsh/encrypted-http-body-protocol"
+revision = "93cc1fa1ad61e19f9a34fb23cb5b5d5635d3edb0"
+license = "MIT"
+changes = ["Local prerelease version and publish=false prevent accidentally resolving the unpatched registry crate", "Restrict hpke features to alloc and x25519; protocol source and test vectors are unchanged."]

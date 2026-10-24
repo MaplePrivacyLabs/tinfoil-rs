@@ -1,6 +1,6 @@
 [package]
 name = "tinfoil"
-version = "0.2.1-maple.1"
+version = "0.2.1-maple.2"
 edition = "2021"
 rust-version = "1.88"
 description = "Rust client for Tinfoil secure enclaves with hardware attestation verification"
@@ -59,8 +59,8 @@ tokio-rustls = { version = "0.26", default-features = false, features = ["ring",
 serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1", features = ["raw_value"] }
 
-# AMD SEV-SNP attestation with crypto verification (no OpenSSL)
-sev = { version = "8", default-features = false, features = ["snp", "crypto_nossl"] }
+# SEV-SNP verification is implemented in src/verifier/attestation/sev;
+# the unused sev crate pulled an obsolete P-384 implementation.
 
 # Crypto primitives
 digest = "0.10"
@@ -71,16 +71,17 @@ sha2 = { version = "0.10", features = ["oid"] }
 # EHBP SPEC). `rustls-no-provider` instead of the default feature so
 # reqwest doesn't pull `__rustls-aws-lc-rs`, keeping the ring-only TLS
 # constraint above intact on Windows MSVC.
-tinfoil-ehbp = { version = "0.3.1", git = "https://github.com/tinfoilsh/encrypted-http-body-protocol", rev = "93cc1fa1ad61e19f9a34fb23cb5b5d5635d3edb0", default-features = false, features = ["rustls-no-provider"] }
+tinfoil-ehbp = { version = "=0.3.1-maple.1", path = "vendor/encrypted-http-body-protocol/rust", default-features = false, features = ["rustls-no-provider"] }
 x509-cert = { version = "0.2", features = ["sct"] }
 
 # TLS encoding for SCT verification (used by x509-cert's sct feature)
 tls_codec = { version = "0.4", features = ["derive"] }
 der = "0.7"
 const-oid = { version = "0.9", features = ["db"] }
-p384 = "0.13"
-p256 = "0.13"  # For Fulcio certificate ECDSA (P-256/secp256r1)
-ecdsa = { version = "0.16", features = ["verifying"] }
+p384 = "0.14"
+p256 = "0.14"  # For Fulcio certificate ECDSA (P-256/secp256r1)
+# Enforce the timing fix for consumers resolving without this lockfile.
+crypto-bigint = { version = "0.7.6", default-features = false }
 ed25519-dalek = "3"  # For Rekor log2025-1 Ed25519 signatures
 
 # RSA for certificate chain verification (AMD certs use RSA-PSS)
@@ -132,10 +133,13 @@ path = "src/bin/conformance.rs"
 [dev-dependencies]
 tokio-test = "0.4"
 hex-literal = "1"
-p256 = { version = "0.13", features = ["ecdsa"] }
+p256 = { version = "0.14", features = ["ecdsa"] }
 futures-util = "0.3"
 # Independent enclave-side EHBP crypto so tests verify the SDK's use of
 # the released client against a separate implementation of the spec.
 hpke = { version = "0.13", default-features = false, features = ["alloc", "x25519"] }
 aes-gcm = "0.10"
 rand = { version = "0.9", default-features = false, features = ["os_rng", "std_rng"] }
+
+[workspace]
+members = ["vendor/encrypted-http-body-protocol/rust"]
